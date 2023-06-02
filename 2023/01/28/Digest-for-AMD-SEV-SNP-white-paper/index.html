@@ -16,8 +16,10 @@
 <meta property="og:image" content="https://gitee.com/song-linke/photos/raw/master/RMP.png">
 <meta property="og:image" content="https://gitee.com/song-linke/photos/raw/master/figure4.png">
 <meta property="og:image" content="https://gitee.com/song-linke/photos/raw/master/figure5.png">
+<meta property="og:image" content="https://gitee.com/song-linke/photos/raw/master/sev-snp.png">
+<meta property="og:image" content="https://gitee.com/song-linke/photos/raw/master/figure6.png">
 <meta property="article:published_time" content="2023-01-28T15:13:16.000Z">
-<meta property="article:modified_time" content="2023-01-28T15:34:50.821Z">
+<meta property="article:modified_time" content="2023-02-08T15:30:43.212Z">
 <meta property="article:author" content="Link">
 <meta property="article:tag" content="AMD">
 <meta name="twitter:card" content="summary">
@@ -79,6 +81,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" aria-label="Previous post" href="/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
         
         <li><a class="icon" aria-label="Next post" href="/2023/01/08/world/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
@@ -108,7 +112,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#White-paper-digest-fo-AMD-SEV-SNP"><span class="toc-number">1.</span> <span class="toc-text">White paper digest fo AMD SEV_SNP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E5%AD%90%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">引子：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#intro"><span class="toc-number">1.2.</span> <span class="toc-text">intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">完整性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reverse-Map-Table"><span class="toc-number">1.4.</span> <span class="toc-text">Reverse Map Table</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-Validation"><span class="toc-number">1.5.</span> <span class="toc-text">Page Validation</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#White-paper-digest-fo-AMD-SEV-SNP"><span class="toc-number">1.</span> <span class="toc-text">White paper digest fo AMD SEV_SNP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E5%AD%90%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">引子：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#intro"><span class="toc-number">1.2.</span> <span class="toc-text">intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">完整性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reverse-Map-Table"><span class="toc-number">1.4.</span> <span class="toc-text">Reverse Map Table</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-Validation"><span class="toc-number">1.5.</span> <span class="toc-text">Page Validation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-States"><span class="toc-number">1.6.</span> <span class="toc-text">Page States</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VMPL-virtual-machine-privilege-levels"><span class="toc-number">1.7.</span> <span class="toc-text">VMPL: virtual machine privilege levels</span></a></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -192,6 +196,13 @@
 <p>这就确保一个SPA Page仅能找到一个GPA Page。那么单射就满足了。双射的满足对于完整性来说其意义不言而喻。</p>
 <p>下面这个攻击例子可以更深入地了解细节：（多看几遍，再看一遍也不会爆炸的）<br><img src="https://gitee.com/song-linke/photos/raw/master/figure5.png"></p>
 <p>特别注意PVALIDATE是用户主动操控的。</p>
+<h4 id="Page-States"><a href="#Page-States" class="headerlink" title="Page States"></a>Page States</h4><p>除了上述的三个页表状态以外，在机器中尚有其余一些状态，其对应的状态表格和Page State转移图如下所示。</p>
+<p><img src="https://gitee.com/song-linke/photos/raw/master/sev-snp.png"></p>
+<p><img src="https://gitee.com/song-linke/photos/raw/master/figure6.png"></p>
+<p>对于后添加的四种状态，它们依赖于AMD-SP的API才能进行状态的转移。</p>
+<h4 id="VMPL-virtual-machine-privilege-levels"><a href="#VMPL-virtual-machine-privilege-levels" class="headerlink" title="VMPL: virtual machine privilege levels"></a>VMPL: virtual machine privilege levels</h4><p>SEV-SNP引入了四个新的权限等级，分别为VMPL0~VMPL3。VMPL能够让一个guest VM将自己的地址空间分级，用以实现硬件上的隔离。</p>
+<p>对于私有客户所掌握的RMP表项，该客户可以根据VMPL0~VMPL3分级来影响不同等级对于该页表的处理方式。如果要修改处理方式，则采用RMPADJUST指令即可。</p>
+<p>高等级权限者，如VMPL0可以通过RMPADJUST指令修改低等级权限者。</p>
 
   </div>
 </article>
@@ -217,7 +228,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#White-paper-digest-fo-AMD-SEV-SNP"><span class="toc-number">1.</span> <span class="toc-text">White paper digest fo AMD SEV_SNP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E5%AD%90%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">引子：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#intro"><span class="toc-number">1.2.</span> <span class="toc-text">intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">完整性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reverse-Map-Table"><span class="toc-number">1.4.</span> <span class="toc-text">Reverse Map Table</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-Validation"><span class="toc-number">1.5.</span> <span class="toc-text">Page Validation</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#White-paper-digest-fo-AMD-SEV-SNP"><span class="toc-number">1.</span> <span class="toc-text">White paper digest fo AMD SEV_SNP</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%95%E5%AD%90%EF%BC%9A"><span class="toc-number">1.1.</span> <span class="toc-text">引子：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#intro"><span class="toc-number">1.2.</span> <span class="toc-text">intro</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="toc-number">1.3.</span> <span class="toc-text">完整性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reverse-Map-Table"><span class="toc-number">1.4.</span> <span class="toc-text">Reverse Map Table</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-Validation"><span class="toc-number">1.5.</span> <span class="toc-text">Page Validation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Page-States"><span class="toc-number">1.6.</span> <span class="toc-text">Page States</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#VMPL-virtual-machine-privilege-levels"><span class="toc-number">1.7.</span> <span class="toc-text">VMPL: virtual machine privilege levels</span></a></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">

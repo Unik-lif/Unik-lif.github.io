@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="最近一两个月4_16 - 5_31在湖里业余时间完成了T大的rustlings闯关和rCore实验，把整个流程跑完感觉还是比较舒服的，可以学习到一些rust语言和操作系统知识，弥补了部分网安操作系统实验课学不到什么东西的遗憾。 适用人群： 喜欢折磨自己的计系同学（要是做完你们的操作系统大实验还意犹未尽只能说确实是勇士），不过如果你是大一大二的学生确实可以先做一个这个练练手？ 鄙人仅代表18级情">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rCore省流版课评">
+<meta property="og:url" content="http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/index.html">
+<meta property="og:site_name" content="Eidoskk&#39;s blog">
+<meta property="og:description" content="最近一两个月4_16 - 5_31在湖里业余时间完成了T大的rustlings闯关和rCore实验，把整个流程跑完感觉还是比较舒服的，可以学习到一些rust语言和操作系统知识，弥补了部分网安操作系统实验课学不到什么东西的遗憾。 适用人群： 喜欢折磨自己的计系同学（要是做完你们的操作系统大实验还意犹未尽只能说确实是勇士），不过如果你是大一大二的学生确实可以先做一个这个练练手？ 鄙人仅代表18级情">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-06-02T13:21:54.000Z">
+<meta property="article:modified_time" content="2023-06-02T13:23:19.963Z">
+<meta property="article:author" content="Link">
+<meta property="article:tag" content="刷课">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>rCore省流版课评</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Unik-lif">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2023/06/02/cs61c%E8%AF%BE%E8%AF%84/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/01/28/Digest-for-AMD-SEV-SNP-white-paper/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&text=rCore省流版课评"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&is_video=false&description=rCore省流版课评"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=rCore省流版课评&body=Check out this article: http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&name=rCore省流版课评&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&t=rCore省流版课评"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E4%BA%BA%E7%BE%A4%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">适用人群：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%BC%80%E5%A7%8B%E8%BF%99%E9%97%A8%E8%AF%BE%E5%89%8D%E4%BD%A0%E9%9C%80%E8%A6%81%E6%9C%89%E4%BB%80%E4%B9%88%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">在开始这门课前你需要有什么前置知识？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rust%E5%AD%A6%E4%B9%A0%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">Rust学习：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%9F%A5%E8%AF%86%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">组成原理知识：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E8%BF%99%E9%97%A8%E8%AF%BE%E5%90%A7%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">简单介绍一下这门课吧：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E9%97%A8%E8%AF%BE%E7%9A%84%E7%89%B9%E8%89%B2%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">这门课的特色：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A5%E4%B8%8D%E5%8F%8A%E4%B8%8A%E8%BD%A6%E4%BA%86%EF%BC%8C%E6%88%91%E8%83%BD%E7%9C%8B%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E9%80%9F%E9%80%9A%E5%90%97%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">来不及上车了，我能看参考资料速通吗？</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        rCore省流版课评
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Link</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-06-02T13:21:54.000Z" itemprop="datePublished">2023-06-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E5%88%B7%E8%AF%BE/" rel="tag">刷课</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <meta name="referrer" content="no-referrer" />
+
+<p>最近一两个月<code>4_16 - 5_31</code>在湖里业余时间完成了<code>T</code>大的<code>rustlings</code>闯关和<code>rCore</code>实验，把整个流程跑完感觉还是比较舒服的，可以学习到一些<code>rust</code>语言和操作系统知识，弥补了部分网安操作系统实验课学不到什么东西的遗憾。</p>
+<h3 id="适用人群："><a href="#适用人群：" class="headerlink" title="适用人群："></a>适用人群：</h3><ul>
+<li>喜欢折磨自己的计系同学（要是做完你们的操作系统大实验还意犹未尽只能说确实是勇士），不过如果你是大一大二的学生确实可以先做一个这个练练手？</li>
+<li>鄙人仅代表18级情况：本科部相同名称的实验课任务与同等水平高校存在较大差距，不满足划水实验的网安同学（<code>Rust</code>对应的内存安全机制是挺值得了解的）</li>
+<li>任何想要学着玩的孩纸~ 快到碗里来</li>
+</ul>
+<h3 id="在开始这门课前你需要有什么前置知识？"><a href="#在开始这门课前你需要有什么前置知识？" class="headerlink" title="在开始这门课前你需要有什么前置知识？"></a>在开始这门课前你需要有什么前置知识？</h3><h4 id="Rust学习："><a href="#Rust学习：" class="headerlink" title="Rust学习："></a>Rust学习：</h4><p>说实在的，<code>Rust</code>不好学，至少没有那么好学，是属于那种比较劝退的类型（我也不知道我现在算是学会了没有）。想把它的一些设计思想吃透，你最好是懂<code>C++</code>的。如果不会<code>C++</code>，你最好学过面向对象语言，如<code>python</code>和<code>java</code>，并且有一定的<code>C</code>语言基础。不过上述的经验只是让学习过程更加丝滑，并不保证学习质量，没有经验当然可以直接学。</p>
+<p>学习<code>Rust</code>的最好方式是看书做题，用<code>rustlings</code>学习是很香的。</p>
+<h4 id="组成原理知识："><a href="#组成原理知识：" class="headerlink" title="组成原理知识："></a>组成原理知识：</h4><p>像计系组成原理每人用<code>verilog</code>或者<code>chisel</code>感觉还是太极端了（毕竟不是每个人都想要搞芯片的说），你只要有一个<code>408</code>级别的计算机组成原理知识就可以了，它们能够让你比较轻松地看文档。（什么你连<code>408</code>知识都没有？那和我当时一样老老实实地学一学<code>cs61c</code>吧）</p>
+<h3 id="简单介绍一下这门课吧："><a href="#简单介绍一下这门课吧：" class="headerlink" title="简单介绍一下这门课吧："></a>简单介绍一下这门课吧：</h3><p>这门课是清华大学学子利用<code>rust</code>重构<code>uCore</code>后得到的成果，大致是在<code>2020</code>年之后成为他们实验课用的材料。</p>
+<p>鄙人对其他的操作系统课程实验，包括我校计系学子的操作系统大实验都缺乏了解，可能没法给大家做对比。不过<code>rCore</code>的主线其实还是相对清晰的，相比于从<code>0</code>到<code>1</code>来写操作系统，这边的实验基本上是写系统调用。为了完成一些系统调用功能，需要学生认真阅读相关的源码框架。理解其中包含的基础知识，然后再开始动手做。</p>
+<p>这门课确实是有授课视频的，主要集中在这个<a target="_blank" rel="noopener" href="https://os2edu.cn/course/">网站</a>上，但是个人觉得听着没啥意思，所以完全照着<a target="_blank" rel="noopener" href="https://learningos.github.io/rCore-Tutorial-Guide-2023S/0setup-devel-env.html">实验指导书</a>跑流程跑下来。单打独斗确实也遇到比较坑的地方，不过大部分我踩过的坑点都在个人写的文档里头记录过了，如果没有的话就当我妹说（×）。</p>
+<p>实验指导书有较为详实的阅读资料，如果感觉不够详细，可以参考这个<a target="_blank" rel="noopener" href="http://rcore-os.cn/rCore-Tutorial-Book-v3/">文档</a>，对于课程，其实也可以参考上交<code>IPADS</code>在<code>b</code>站上上传的相关视频课程和经典的<code>OSTEP</code>，<code>OSTEP</code>对应的课程<a target="_blank" rel="noopener" href="https://canvas.wisc.edu/courses/154998">cs537</a>也是非常棒，做存储的同学对于威斯康星麦迪逊的这个研究组想必肯定不陌生了。</p>
+<h3 id="这门课的特色："><a href="#这门课的特色：" class="headerlink" title="这门课的特色："></a>这门课的特色：</h3><ul>
+<li>从一个最小的利用<code>RustSBI</code>打印字符的三叶虫操作系统开始，体验一步步“生物进化”的过程。其实和大家熟悉的<code>xv6</code>很像（然而本人不熟悉，之后会去好好读源码的！）</li>
+<li>编程任务并不是那么困难，不需要你大量地进行类似于文件系统的大规模设计和写代码。主要时间是在读源码、读文档、以及仿写。目标则是实现一些算法，如<code>stride</code>调度，<code>banker algorithm</code>银行家算法，写写系统调用等等。本人回顾了一下这门课的工作量，感觉可能加起来也就一千行出头？当然也有可能是因为<code>rust</code>本身写起来其实挺方便的。</li>
+<li>测试给的很全，最关键的是测试是能看到的，而且有一些不好说出来的坑点？需要仔细甄别。最后的测试打分可以在本地，也可以在<code>github</code>上用<code>CI</code>来做。</li>
+</ul>
+<h3 id="来不及上车了，我能看参考资料速通吗？"><a href="#来不及上车了，我能看参考资料速通吗？" class="headerlink" title="来不及上车了，我能看参考资料速通吗？"></a>来不及上车了，我能看参考资料速通吗？</h3><ul>
+<li>我卓了一遍，文档和代码都有。</li>
+<li>你想速通当然可以了~当然还是不推荐。</li>
+</ul>
+<p>本人的源码解读地址：<br><a target="_blank" rel="noopener" href="https://github.com/Unik-lif/course_notes/tree/main/rCore">https://github.com/Unik-lif/course_notes/tree/main/rCore</a></p>
+<p>学习网址：<br><a target="_blank" rel="noopener" href="https://github.com/LearningOS">https://github.com/LearningOS</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/Unik-lif">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E7%94%A8%E4%BA%BA%E7%BE%A4%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">适用人群：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%BC%80%E5%A7%8B%E8%BF%99%E9%97%A8%E8%AF%BE%E5%89%8D%E4%BD%A0%E9%9C%80%E8%A6%81%E6%9C%89%E4%BB%80%E4%B9%88%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">在开始这门课前你需要有什么前置知识？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Rust%E5%AD%A6%E4%B9%A0%EF%BC%9A"><span class="toc-number">2.1.</span> <span class="toc-text">Rust学习：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%9F%A5%E8%AF%86%EF%BC%9A"><span class="toc-number">2.2.</span> <span class="toc-text">组成原理知识：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D%E4%B8%80%E4%B8%8B%E8%BF%99%E9%97%A8%E8%AF%BE%E5%90%A7%EF%BC%9A"><span class="toc-number">3.</span> <span class="toc-text">简单介绍一下这门课吧：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%99%E9%97%A8%E8%AF%BE%E7%9A%84%E7%89%B9%E8%89%B2%EF%BC%9A"><span class="toc-number">4.</span> <span class="toc-text">这门课的特色：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A5%E4%B8%8D%E5%8F%8A%E4%B8%8A%E8%BD%A6%E4%BA%86%EF%BC%8C%E6%88%91%E8%83%BD%E7%9C%8B%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E9%80%9F%E9%80%9A%E5%90%97%EF%BC%9F"><span class="toc-number">5.</span> <span class="toc-text">来不及上车了，我能看参考资料速通吗？</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&text=rCore省流版课评"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&is_video=false&description=rCore省流版课评"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=rCore省流版课评&body=Check out this article: http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&title=rCore省流版课评"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&name=rCore省流版课评&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2023/06/02/rCore%E7%9C%81%E6%B5%81%E7%89%88%E8%AF%BE%E8%AF%84/&t=rCore省流版课评"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    Link
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/Unik-lif">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
